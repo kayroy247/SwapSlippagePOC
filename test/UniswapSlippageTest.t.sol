@@ -35,28 +35,32 @@ contract UniswapSlippageTest is Test {
 
         vm.startPrank(DaiHolder);
         daiToken.transfer(address(this), tokenAmount);
-        // daiToken.transfer(alice, tokenAmount);
+        daiToken.transfer(alice, tokenAmount * 2);
         vm.stopPrank();
 
         vm.deal(alice, 101 ether);
 
         // console2.log("Bot balance before is profit:", address(alice).balance / 1e18);
-         uint beforeProfit = address(alice).balance/ 1e18;
+         uint beforeProfit = daiToken.balanceOf(alice) / 1e18;
+         uint aliceAmount = daiToken.balanceOf(alice);
 
-        vm.startPrank(alice);
-        daiToken.approve(address(uniswapRouter02), type(uint).max);
+         vm.startPrank(alice);
+        
+         daiToken.approve(address(uniswapRouter02), type(uint).max);
+         uniswapRouter02.swapExactTokensForETHSupportingFeeOnTransferTokens(
+             aliceAmount,
+             0, // accept any amount of ETH
+             path,
+             alice,
+             block.timestamp
+         );
+         vm.stopPrank();
 
-        uniswapRouter02.swapExactETHForTokensSupportingFeeOnTransferTokens{value: 100 ether}(
-            0 ,
-            daiToEthpath,
-            alice,
-            block.timestamp   
-        );
-        vm.stopPrank();
+        
 
 
         // console2.log("Bot balance during pwning:", address(alice).balance / 1e18);
-        uint duringProfit = address(alice).balance/ 1e18;
+        uint duringProfit = daiToken.balanceOf(alice) / 1e18;
 
         // uint daiHolderBalance = daiToken.balanceOf(DaiHolder);
         console2.log("This contract's dai",daiToken.balanceOf(address(this))/ 1e18);
@@ -72,32 +76,33 @@ contract UniswapSlippageTest is Test {
             block.timestamp
         );
 
-        uint aliceAmount = daiToken.balanceOf(alice);
+        
 
         console2.log("Alice dai balance",aliceAmount/ 1e18);
         
         vm.startPrank(alice);
-        
         daiToken.approve(address(uniswapRouter02), type(uint).max);
-        uniswapRouter02.swapExactTokensForETHSupportingFeeOnTransferTokens(
-            aliceAmount,
-            0, // accept any amount of ETH
-            path,
+
+        uniswapRouter02.swapExactETHForTokensSupportingFeeOnTransferTokens{value: 100 ether}(
+            0 ,
+            daiToEthpath,
             alice,
-            block.timestamp
+            block.timestamp   
         );
         vm.stopPrank();
+       
 
         // console2.log("Bot balance after profit smile:", address(alice).balance/ 1e18);
-        uint afterProfit = address(alice).balance/ 1e18;
+        uint afterProfit = daiToken.balanceOf(alice) / 1e18;
         console2.log("Before profit:", beforeProfit);
         console2.log("During profit:", duringProfit);
         console2.log("After profit:", afterProfit);
+        console2.log("Big Profit",afterProfit - beforeProfit);
+        console2.log("Yippeee", afterProfit - beforeProfit );
         uint balanceAfter = address(this).balance;
         console2.log(daiToken.balanceOf(alice));
         console2.log((balanceAfter - balanceBefore)/ 1e18);
         assert(balanceAfter > balanceBefore);
     }
-
-    
+  
 }
