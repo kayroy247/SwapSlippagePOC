@@ -6,7 +6,11 @@ import {Test, console2} from "forge-std/Test.sol";
 import { IUniswapV2Router02 } from "./interface/IUniswapV2Router02.sol";
 import {IERC20 } from "./interface/IERC20.sol";
 
-
+/***
+This Test swaps DAI mainnet token to ETH and vice versa.
+So run the test with the fork of the mainnet.
+forge test --fork-url YOUR_MAINNET_NODE_URL -vvv
+*/
 contract UniswapSlippageTest is Test {
     IUniswapV2Router02 public uniswapRouter02;
 
