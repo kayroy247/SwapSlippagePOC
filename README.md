@@ -1,66 +1,28 @@
-## Foundry
+## Slippage Loss demonstration 
+A POC do demonstrate sandwich (frontruning + backrunning ) attack on swap transaction without slippage protection.
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+Smaller pools are easy to manipulate.
+new pools most times have smaller liquidity.
+This opens opportunity for so much profit than the one demonstrated in this POC.
 
-Foundry consists of:
+## POC location
+test/UniswapSlippageTest.sol.
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## How to run test?
 
-## Documentation
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
 ```
-
-### Test
-
-```shell
-$ forge test
+forge test --fork-url YOUR_MAINNET_NODE_URL -vvv
 ```
+- replace the YOUR_MAINNET_NODE_URL above with your node url. You can get one from alchemy.
 
-### Format
+## Result
 
-```shell
-$ forge fmt
-```
+Running 1 test for test/UniswapSlippageTest.t.sol:UniswapSlippageTest
+[PASS] test_SlippageBandit() (gas: 356865)
+Logs:
+  Alice Before profit: 200000
+  Alice During profit: 0
+  Alice After profit: 204854
+  Alice has just made a Big Profit of  4854 DAI from this testContract's lack of slippage protection
+  Yippeee 4854
 
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
