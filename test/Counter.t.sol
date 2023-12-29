@@ -2,7 +2,7 @@
 pragma solidity ^0.8.13;
 
 import {Test, console2} from "forge-std/Test.sol";
-import "@uniswap/v2-periphery";
+import {UniswapV2Router02 as uniswapRouterV2 } from  "v2-periphery/contracts/UniswapV2Router02.sol";
 
 
 contract UniswapSlippage is Test {
@@ -11,6 +11,7 @@ contract UniswapSlippage is Test {
     function setUp() public {
         counter = new Counter();
         counter.setNumber(0);
+        console.log("this");
     }
 
     function test_Increment() public {
