@@ -10,6 +10,8 @@ import {IERC20 } from "./interface/IERC20.sol";
 This Test swaps DAI mainnet token to ETH and vice versa.
 So run the test with the fork of the mainnet.
 forge test --fork-url YOUR_MAINNET_NODE_URL -vvv
+smaller pools are easy to manipulate than this
+Newer pools are most times small making it very easy to swing price in any direction.
 */
 contract UniswapSlippageTest is Test {
     IUniswapV2Router02 public uniswapRouter02;
@@ -90,13 +92,8 @@ contract UniswapSlippageTest is Test {
         
         uint aliceEth = address(alice).balance;
 
-        // console2.log("Bot balance during pwning:", address(alice).balance / 1e18);
+        
         uint duringProfit = daiToken.balanceOf(alice) / 1e18;
-
-        // uint daiHolderBalance = daiToken.balanceOf(DaiHolder);
-    //     console2.log("This contract's dai",daiToken.balanceOf(address(this))/ 1e18);
-    //     console2.log("alice's dai",daiToken.balanceOf(address(alice))/ 1e18);
-    //    uint balanceBefore = address(this).balance;
 
 
     //Innocents bob sets minAmountOut to zero and got gamed by Alice's transaction above.
@@ -112,7 +109,7 @@ contract UniswapSlippageTest is Test {
         vm.stopPrank();
         
 
-        // console2.log("Alice dai balance",aliceAmount/ 1e18);
+        
         
         vm.startPrank(alice);
         daiToken.approve(address(uniswapRouter02), type(uint).max);
@@ -126,17 +123,14 @@ contract UniswapSlippageTest is Test {
         vm.stopPrank();
        
 
-        // console2.log("Bot balance after profit smile:", address(alice).balance/ 1e18);
+        
         uint afterProfit = daiToken.balanceOf(alice) / 1e18;
         console2.log("Alice Before profit:", beforeProfit);
         console2.log("Alice During profit:", duringProfit);
         console2.log("Alice After profit:", afterProfit);
         console2.log("Alice has just made a Big Profit of ",afterProfit - beforeProfit, "DAI from this testContract's lack of slippage protection");
         console2.log("Yippeee", afterProfit - beforeProfit );
-        // uint balanceAfter = address(bob).balance;
-        // console2.log(daiToken.balanceOf(alice));
         
-        // console2.log("Alice ETH", aliceEth/ 1e18);
     }
   
 }
